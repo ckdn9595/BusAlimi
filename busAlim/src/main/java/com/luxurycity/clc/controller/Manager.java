@@ -30,8 +30,9 @@ public class Manager {
             Collections.reverse(line);
             bufReader.close();
         }catch (FileNotFoundException e) {
+        	e.printStackTrace();
         }catch(IOException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
 
 		mv.addObject("LINE", line);
