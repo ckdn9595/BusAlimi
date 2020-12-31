@@ -28,6 +28,7 @@ public class LogginAop {
 	public void recordLog(JoinPoint join) {
 		HttpSession session = (HttpSession) join.getArgs()[1];
 		String sid = (String) session.getAttribute("SID");
+		
 		if(sid == null) {
 			sid = (String) session.getAttribute("MID");
 		}

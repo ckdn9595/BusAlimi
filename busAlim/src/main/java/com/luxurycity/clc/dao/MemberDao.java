@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.luxurycity.clc.vo.*;
 
 public class MemberDao {
+	
 	@Autowired
 	SqlSessionTemplate sqlSession;
 	

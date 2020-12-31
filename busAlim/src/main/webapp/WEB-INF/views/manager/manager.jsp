@@ -47,7 +47,6 @@ a:visited {
 </c:if>
 
 	<!-- 로그인 하지 않을 경우 -->
-
 <c:if test="${empty MID}">
   <div class="w3-container w3-row">
     <div class="w3-col w3-center">

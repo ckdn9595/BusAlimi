@@ -10,8 +10,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/manager")
 public class Manager {
-//	@Autowired
-//	ManagerDao mgDao;
+/*
+	@Autowired
+	ManagerDao mgDao;
+*/
 	
 	@RequestMapping("/manager.clc")
 	public ModelAndView info(ModelAndView mv) {
