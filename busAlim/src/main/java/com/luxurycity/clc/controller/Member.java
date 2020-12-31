@@ -4,7 +4,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,12 +54,15 @@ public class Member {
 		
 		 
 		int cnt = 0;
+		int mCnt = 0;
 		// 계정 검사
 		cnt = mDao.loginCnt(mVO);
+		mCnt = mDao.managerCnt(mVO);
 		
 		// 존재하지 않는 계정이라면
 		if(cnt == 0) {
 			// 로그인 페이지로 다시 리다이렉트
+			System.out.println("여기야");
 			mv.setViewName("redirect:/member/login.clc");
 			return mv;
 		}
@@ -66,7 +70,12 @@ public class Member {
 		// 계정에 해당하는 아바타 가져오고
 		AvatarVO aVO = mDao.getAvt(mVO.getId());
 		// 세션에 아이디 부여하고
-		session.setAttribute("SID", mVO.getId());
+		if(mCnt == 0) {
+			session.setAttribute("SID", mVO.getId());				// 세션에 아이디 부여하고
+				session.setAttribute("SID", mVO.getId());
+			} else if(mCnt == 1) {
+				session.setAttribute("MID", mVO.getId());
+			}
 		// 세션에 아바타 부여하고
 		session.setAttribute("AVT", aVO);
 		// 메인페이지로 리다이렉트
@@ -78,10 +87,14 @@ public class Member {
 	
 	@RequestMapping("/logout.clc")
 	public ModelAndView logout(ModelAndView mv, HttpSession session) {
-		// 아바타와 아이디 세션에서 삭제하고
+		String sid = (String)session.getAttribute("SID");
+		if(sid == null) {
+			sid = (String)session.getAttribute("MID");
+		}
+//		membLog.info(sid + " ] logout");
 		session.removeAttribute("SID");
+		session.removeAttribute("MID");
 		session.removeAttribute("AVT");
-		
 		// 뷰 설정하고
 		mv.setViewName("redirect:/main.clc");
 		return mv;

@@ -15,6 +15,18 @@
 		    AND pw = #{pw} 
 		    AND isshow = 'Y' 
 	</select>
+		<!-- 관리자 추가 -->
+	<select id="manager" resultType="int" parameterType="mVO">
+		SELECT
+			COUNT(*) cnt
+		FROM
+			member
+		WHERE
+			id = #{id}
+			AND pw = #{pw}
+			AND isshow = 'Y'
+			AND manager = 'Y'
+	</select>
 	<select id="getMembInfo" resultType="mVO" parameterType="string">
 		SELECT
 			*

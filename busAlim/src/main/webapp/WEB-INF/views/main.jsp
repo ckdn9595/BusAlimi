@@ -37,7 +37,7 @@ a:visited {
 
 
 	<!-- 로그인 했을 경우 -->
-<c:if test="${not empty SID}">
+<c:if test="${not empty SID or not empty MID}">
   <div class="w3-container w3-row">
     <div class="w3-col s4">
       <a href="/clc/member/myinfo.clc" class="w3-bar-item">
@@ -55,7 +55,7 @@ a:visited {
 
 	<!-- 로그인 하지 않을 경우 -->
 
-<c:if test="${empty SID}">
+<c:if test="${empty SID and empty MID}">
   <div class="w3-container w3-row">
     <div class="w3-col w3-center">
       <span>로그인 후 이용해주세요.</span><br>
@@ -86,6 +86,10 @@ a:visited {
     		<a href="/clc/member/myinfo.clc" class="w3-bar-item w3-button"><span class="w3-col m11 w3-right"><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;회원정보</span></a>
     	</div>
     </div>
+</c:if>
+	<!-- 관리자페이지 -->
+<c:if test="${not empty MID}">
+	    <a href="/clc/manager/manager.clc" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw"></i>  관리자페이지</a>
 </c:if>
   </div>
 </nav>
