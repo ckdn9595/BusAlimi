@@ -3,6 +3,8 @@ package com.luxurycity.clc.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,8 @@ public class Member {
 	BookmarkDao bmDao;
 	@Autowired
 	MemberService mService;
+
+//	private static final Logger membLog = LoggerFactory.getLogger(Member.class);
 	
 	@RequestMapping("/login.clc")
 	public ModelAndView login(ModelAndView mv) {
@@ -33,11 +37,15 @@ public class Member {
 		return mv;
 	}
 	
+	
+	// 관리자페이지 수정
 	@RequestMapping("/loginProc.clc")
 	public ModelAndView loginProc(ModelAndView mv, HttpSession session, MemberVO mVO) {
 		int cnt = 0;
+		int mCnt = 0;
 		// 계정 검사
 		cnt = mDao.loginCnt(mVO);
+		mCnt = mDao.managerCnt(mVO);
 		
 		// 존재하지 않는 계정이라면
 		if(cnt == 0) {
@@ -48,10 +56,15 @@ public class Member {
 		// 존재하는 계정이면
 		// 계정에 해당하는 아바타 가져오고
 		AvatarVO aVO = mDao.getAvt(mVO.getId());
-		// 세션에 아이디 부여하고
-		session.setAttribute("SID", mVO.getId());
+		if(mCnt == 0) {
+			// 세션에 아이디 부여하고
+			session.setAttribute("SID", mVO.getId());
+		} else if(mCnt == 1) {
+			session.setAttribute("MID", mVO.getId());
+		}
 		// 세션에 아바타 부여하고
 		session.setAttribute("AVT", aVO);
+//		membLog.info(mVO.getId() + " ] login");
 		// 메인페이지로 리다이렉트
 		mv.setViewName("redirect:/main.clc");
 		return mv;
@@ -60,7 +73,13 @@ public class Member {
 	@RequestMapping("/logout.clc")
 	public ModelAndView logout(ModelAndView mv, HttpSession session) {
 		// 아바타와 아이디 세션에서 삭제하고
+		String sid = (String)session.getAttribute("SID");
+		if(sid == null) {
+			sid = (String)session.getAttribute("MID");
+		}
+//		membLog.info(sid + " ] logout");
 		session.removeAttribute("SID");
+		session.removeAttribute("MID");
 		session.removeAttribute("AVT");
 		
 		// 뷰 설정하고

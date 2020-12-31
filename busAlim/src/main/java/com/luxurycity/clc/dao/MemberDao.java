@@ -17,6 +17,11 @@ public class MemberDao {
 		return sqlSession.selectOne("mSQL.loginCnt", mVO);
 	}
 	
+	// 로그인시 관리자인지 확인 처리 함수(진우)
+	public int managerCnt(MemberVO mVO) {
+		return sqlSession.selectOne("mSQL.manager", mVO);
+	}
+	
 	// 메인에 표시되는 아바타 데이터 가져오기 전담 처리 함수(영선)
 	public AvatarVO getAvt(String id) {
 		return sqlSession.selectOne("mSQL.getMembAvt", id);
